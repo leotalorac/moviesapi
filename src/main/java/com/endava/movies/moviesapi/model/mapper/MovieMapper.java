@@ -8,6 +8,5 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface MovieMapper {
     MovieMapper INSTANCE = Mappers.getMapper(MovieMapper.class);
-
     MovieDTO movieEntityToMovieDTO(MovieEntity movieEntity);
 }
