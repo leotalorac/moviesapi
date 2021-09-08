@@ -1,10 +1,7 @@
 package com.endava.movies.moviesapi.model.entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -12,8 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@Builder
 @Document(collection = "movies")
 public class MovieEntity implements Serializable {
     @Id
@@ -22,5 +20,10 @@ public class MovieEntity implements Serializable {
     @Field("original_title")
     private String originalTitle;
     private Boolean adult;
-    private List<String> genres;
+    private List<GenreEntity> genres;
+    private String overview;
+    private String originalLanguage;
+    private List<RatingEntity> ratings;
+    private Integer budget;
+    private String title;
 }
