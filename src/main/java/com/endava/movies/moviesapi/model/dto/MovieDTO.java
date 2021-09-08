@@ -1,5 +1,7 @@
 package com.endava.movies.moviesapi.model.dto;
 
+import com.endava.movies.moviesapi.model.entities.GenreEntity;
+import com.endava.movies.moviesapi.model.entities.RatingEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,5 +14,10 @@ public class MovieDTO implements Serializable {
     private Integer id;
     private String originalTitle;
     private Boolean adult;
-    private List<String> genres;
+    private List<GenreEntity> genres;
+    private String overview;
+    private String originalLanguage;
+    private List<RatingEntity> ratings;
+    private Integer budget;
+    private String title;
 }

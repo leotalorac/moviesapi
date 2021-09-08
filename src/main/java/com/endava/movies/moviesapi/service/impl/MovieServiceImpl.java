@@ -51,6 +51,7 @@ public class MovieServiceImpl implements MovieService {
         while (!executor.isTerminated()) {
 
         }
+        executor.shutdown();
         System.out.println("\nFinished all threads");
     }
 

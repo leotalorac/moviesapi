@@ -1,7 +1,10 @@
 package com.endava.movies.moviesapi.service.impl;
 
 import com.endava.movies.moviesapi.model.entities.MovieEntity;
+import com.endava.movies.moviesapi.model.entities.RatingEntity;
 import com.endava.movies.moviesapi.repository.MovieRepository;
+import com.endava.movies.moviesapi.repository.RatingRepository;
+import com.endava.movies.moviesapi.service.RatingService;
 
 import java.util.List;
 
@@ -19,12 +22,5 @@ public class Uploader implements Runnable{
     @Override
     public void run() {
         movieRepository.saveAll(this.movies);
-    }
-    public void start () {
-        System.out.println("Starting " +  threadName );
-        if (t == null) {
-            t = new Thread (this, threadName);
-            t.start ();
-        }
     }
 }
