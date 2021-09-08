@@ -37,3 +37,7 @@ out/
 .vscode/
 ### DATA ###
 /data
+
+###MAC@@@
+
+.DS_Store

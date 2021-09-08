@@ -1,6 +1,7 @@
 package com.endava.movies.moviesapi.service.impl;
 
 import com.endava.movies.moviesapi.model.dto.MovieDTO;
+import com.endava.movies.moviesapi.model.entities.GenreEntity;
 import com.endava.movies.moviesapi.model.entities.MovieEntity;
 import com.endava.movies.moviesapi.model.mapper.MovieMapper;
 import com.endava.movies.moviesapi.repository.MovieRepository;
@@ -28,6 +29,10 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository
                 .findById(id)
                 .map(MovieMapper.INSTANCE::movieEntityToMovieDTO);
+    }
+    @Override
+    public Optional<List<MovieEntity>> getMoviesFilter(Boolean adult, String title, List<GenreEntity> genres){
+        return movieRepository.findByAdultAndTitleAndGenres(adult,title,genres);
     }
 
     @Override
