@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @Document(collection = "movies")
 public class MovieEntity implements Serializable {
     @Id
@@ -23,4 +23,7 @@ public class MovieEntity implements Serializable {
     private String originalTitle;
     private Boolean adult;
     private List<String> genres;
+    private String overview;
+    private String originalLanguage;
+    private List<RatingEntity> ratings;
 }
