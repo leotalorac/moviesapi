@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 public class RatingEntity {
     @Id
     @Field("_id")
-    private Integer id;
+    private Long id;
     private Integer userId;
     private Integer movieId;
     private Float rating;

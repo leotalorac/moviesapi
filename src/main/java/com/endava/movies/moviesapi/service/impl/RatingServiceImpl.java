@@ -29,9 +29,9 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public void saveRatings(List<RatingEntity> ratings) {
+    public Integer saveRatings(List<RatingEntity> ratings) {
         List<UploaderRatings> uploaders = new ArrayList<>();
-        int MAX = 5000;
+        int MAX = 10000;
         int index=0;
         while ( index<ratings.size()){
             if(index+MAX > ratings.size()){
@@ -49,7 +49,10 @@ public class RatingServiceImpl implements RatingService {
         while (!executor.isTerminated()) {
 
         }
+
         executor.shutdown();
         System.out.println("\nFinished all threads");
+        return index;
+
     }
 }

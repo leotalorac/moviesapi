@@ -23,14 +23,17 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
 @RequestMapping("v1/demo-service")
 public class DemoController {
-
-    MovieService movieServiceImpl;
-    RatingService ratingServiceImpl;
+    private static final Integer MAX_THREADS = 10;
+    private final MovieService movieServiceImpl;
+    private final RatingService ratingServiceImpl;
     @Autowired
     public DemoController(MovieService movieServiceImpl,RatingService ratingServiceImpl) {
         this.movieServiceImpl = movieServiceImpl;
@@ -115,19 +118,31 @@ public class DemoController {
 
     @GetMapping("/load/ratings")
     public ResponseEntity<String> uploadRatings(){
+        int futuresAvailables = MAX_THREADS;
         try(CSVReader reader = new CSVReader(new FileReader("./data/ratings.csv"))){
             String[] row;
-            List<RatingEntity> ratingsToCharge = new ArrayList<>();
+            List<CompletableFuture<Integer>> futures = new ArrayList<>();
             boolean first = false;
-            Integer id= 0;
+            long id= 0;
+            List<RatingEntity> ratingsToCharge = new ArrayList<>();
             while ((row = reader.readNext()) != null) {
+//                ftp file
+//                ssh upload
                 if(first){
                     try {
                         ratingsToCharge.add(ratingsFromLine(row,id));
                         id+=1;
-                        if(id%50000==0){
-                            ratingServiceImpl.saveRatings(ratingsToCharge);
-                            ratingsToCharge.clear();
+                        if(id%100000==0){
+                            if(futuresAvailables>0){
+                                List<RatingEntity> finalRatingsToCharge = ratingsToCharge;
+                                futures.add(CompletableFuture.supplyAsync(() -> ratingServiceImpl.saveRatings(finalRatingsToCharge)));
+                                ratingsToCharge = new ArrayList<>();
+                                futuresAvailables--;
+                            }
+                            futures=futures.stream()
+                                    .filter(future->!future.isDone())
+                                    .collect(Collectors.toList());
+                            futuresAvailables=MAX_THREADS-futures.size();
                         }
                     }catch (Exception e){
                         log.error("Error ," , e);
@@ -137,7 +152,6 @@ public class DemoController {
                 }
             }
             ratingServiceImpl.saveRatings(ratingsToCharge);
-            ratingsToCharge.clear();
             return ResponseEntity.ok("Uploaded");
         }catch (Exception e){
             e.printStackTrace();
@@ -145,8 +159,9 @@ public class DemoController {
         }
     }
     //builder
-    public RatingEntity ratingsFromLine(String[] line,Integer id) throws JsonProcessingException {
-        return RatingEntity.builder()
+    public RatingEntity ratingsFromLine(String[] line,Long id) throws JsonProcessingException {
+        return RatingEntity
+                .builder()
                 .id(id)
                 .userId(Integer.parseInt(line[0]))
                 .movieId(Integer.parseInt(line[1]))

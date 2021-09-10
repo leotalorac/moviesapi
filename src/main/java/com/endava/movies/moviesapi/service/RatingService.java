@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RatingService {
-    void saveRatings(List<RatingEntity> ratings);
+    Integer saveRatings(List<RatingEntity> ratings);
 
     Optional<List<RatingEntity>> getRatingsByMovie(Integer id);
 }

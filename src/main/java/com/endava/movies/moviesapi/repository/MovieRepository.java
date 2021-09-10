@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends MongoRepository<MovieEntity,Integer>{
-    public Optional<List<MovieEntity>> findByAdultOrTitleOrGenres(Boolean adult, String title, List<GenreEntity> genres);
-    public Optional<List<MovieEntity>> findByAdultAndTitleAndGenres(Boolean adult, String title, List<GenreEntity> genres);
+    Optional<List<MovieEntity>> findByAdultOrTitleOrGenres(Boolean adult, String title, List<GenreEntity> genres);
+    Optional<List<MovieEntity>> findByAdultAndTitleAndGenres(Boolean adult, String title, List<GenreEntity> genres);
 }

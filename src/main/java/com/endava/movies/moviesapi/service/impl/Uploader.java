@@ -22,5 +22,6 @@ public class Uploader implements Runnable{
     @Override
     public void run() {
         movieRepository.saveAll(this.movies);
+
     }
 }

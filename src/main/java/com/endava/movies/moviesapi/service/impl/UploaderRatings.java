@@ -19,5 +19,6 @@ public class UploaderRatings implements Runnable{
     @Override
     public void run() {
         ratingRepository.saveAll(this.ratings);
+        this.ratings.clear();
     }
 }

@@ -47,7 +47,6 @@ public class MovieServiceImpl implements MovieService {
                 uploaders.add(new Uploader(movies.subList(index,index+MAX),movieRepository,"Thread "+ Integer.toString(index)));
             }
             index+=MAX;
-
         }
         ExecutorService executor = Executors.newFixedThreadPool(uploaders.size());
         uploaders.forEach(executor::execute);
