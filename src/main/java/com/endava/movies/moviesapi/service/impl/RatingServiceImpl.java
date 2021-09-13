@@ -1,5 +1,7 @@
 package com.endava.movies.moviesapi.service.impl;
 
+import com.endava.movies.moviesapi.model.entities.GenreEntity;
+import com.endava.movies.moviesapi.model.entities.MovieEntity;
 import com.endava.movies.moviesapi.model.entities.RatingEntity;
 import com.endava.movies.moviesapi.repository.MovieRepository;
 import com.endava.movies.moviesapi.repository.RatingRepository;
@@ -25,10 +27,11 @@ public class RatingServiceImpl implements RatingService {
     public Optional<List<RatingEntity>> getRatingsByMovie(Integer movieId){
         return ratingRepository.findByMovieId(movieId);
     }
+
     @Override
     public void saveRatings(List<RatingEntity> ratings) {
         List<UploaderRatings> uploaders = new ArrayList<>();
-        int MAX = 500000;
+        int MAX = 5000;
         int index=0;
         while ( index<ratings.size()){
             if(index+MAX > ratings.size()){

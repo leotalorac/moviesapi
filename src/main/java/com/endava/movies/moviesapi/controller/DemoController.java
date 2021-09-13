@@ -1,6 +1,7 @@
 package com.endava.movies.moviesapi.controller;
 
 import com.endava.movies.moviesapi.model.dto.MovieDTO;
+import com.endava.movies.moviesapi.model.entities.GenreEntity;
 import com.endava.movies.moviesapi.model.entities.MovieEntity;
 import com.endava.movies.moviesapi.model.entities.RatingEntity;
 import com.endava.movies.moviesapi.model.mapper.MovieMapper;
@@ -13,10 +14,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -61,7 +59,20 @@ public class DemoController {
 
     }
 
-
+    @GetMapping("movies/")
+    public ResponseEntity<List<MovieEntity>> getMovies(@RequestParam(required = false) Boolean adult,
+                                                       @RequestParam(required = false) List<GenreEntity> genres,
+                                                       @RequestParam(required = false) String title,
+                                                       @RequestParam(required = false) Integer limit){
+//        List<GenreEntity> genres = new ArrayList<>();
+//        Arrays.stream(genre.split(",")).forEach(g ->{
+//            genres.add(new GenreEntity())
+//        });
+        return movieServiceImpl
+                .getMoviesFilter(adult,title,genres)
+                .map(ResponseEntity::ok)
+                .orElseGet(()->ResponseEntity.noContent().build());
+    }
     @GetMapping("/load/movies")
     public ResponseEntity<String> uploadMovies(){
         try(CSVReader reader = new CSVReader(new FileReader("./data/movies_metadata.csv"))){
@@ -114,15 +125,19 @@ public class DemoController {
                     try {
                         ratingsToCharge.add(ratingsFromLine(row,id));
                         id+=1;
+                        if(id%50000==0){
+                            ratingServiceImpl.saveRatings(ratingsToCharge);
+                            ratingsToCharge.clear();
+                        }
                     }catch (Exception e){
                         log.error("Error ," , e);
                     }
-
                 }else{
                     first=true;
                 }
             }
             ratingServiceImpl.saveRatings(ratingsToCharge);
+            ratingsToCharge.clear();
             return ResponseEntity.ok("Uploaded");
         }catch (Exception e){
             e.printStackTrace();
