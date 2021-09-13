@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface MovieService {
     Optional<MovieDTO> getMovieById(Integer id);
-    void saveMovies(List<MovieEntity> movies);
+    Integer saveMovies();
     Page<MovieEntity> getMoviesFilter(Integer page,Boolean adult, String title, List<String> genres,Integer limit);
 }

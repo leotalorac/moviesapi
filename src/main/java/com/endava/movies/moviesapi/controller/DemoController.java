@@ -29,9 +29,9 @@ import java.util.List;
 @Slf4j
 @RequestMapping("v1/demo-service")
 public class DemoController {
-
     MovieService movieServiceImpl;
     RatingService ratingServiceImpl;
+
     @Autowired
     public DemoController(MovieService movieServiceImpl,RatingService ratingServiceImpl) {
         this.movieServiceImpl = movieServiceImpl;
@@ -57,7 +57,6 @@ public class DemoController {
                 .getRatingsByMovie(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.noContent().build());
-
     }
 
     @GetMapping("movies/{page}")
@@ -73,43 +72,8 @@ public class DemoController {
                 .getMoviesFilter(page,adult,title,genresSent,limit));
     }
     @GetMapping("/load/movies")
-    public ResponseEntity<String> uploadMovies(){
-        try(CSVReader reader = new CSVReader(new FileReader("./data/movies_metadata.csv"))){
-            String[] row;
-            List<MovieEntity> moviesToCharge = new ArrayList<>();
-            boolean first = false;
-            while ((row = reader.readNext()) != null) {
-                if(first){
-                    try {
-                        moviesToCharge.add(movieFromLine(row));
-                    }catch (Exception e){
-                        log.error("Error ," , e);
-                    }
-                }else{
-                    first=true;
-                }
-            }
-            movieServiceImpl.saveMovies(moviesToCharge);
-            return ResponseEntity.ok("Uploaded");
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-
-    }
-    //builder
-    public MovieEntity movieFromLine(String[] line) throws JsonProcessingException {
-        return MovieEntity.builder()
-                .id(Integer.parseInt(line[5]))
-                .originalTitle(line[8])
-                .adult(Boolean.parseBoolean(line[0]))
-                .genres(new GenreParser().parseJson(line[3]))
-                .overview(line[9])
-                .originalLanguage(line[7])
-                .ratings(new ArrayList<>())
-                .budget(Integer.parseInt(line[2]))
-                .title(line[20])
-                .build();
+    public ResponseEntity<Integer> uploadMovies(){
+        return ResponseEntity.ok(movieServiceImpl.saveMovies());
     }
 
     @GetMapping("/load/ratings")
