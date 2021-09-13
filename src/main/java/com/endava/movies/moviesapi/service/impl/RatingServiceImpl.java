@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @Service
 public class RatingServiceImpl implements RatingService {
-    private RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
 
     @Autowired
     public RatingServiceImpl(RatingRepository repository){
