@@ -20,7 +20,7 @@ public class MovieEntity implements Serializable {
     @Field("original_title")
     private String originalTitle;
     private Boolean adult;
-    private List<GenreEntity> genres;
+    private List<String> genres;
     private String overview;
     private String originalLanguage;
     private List<RatingEntity> ratings;

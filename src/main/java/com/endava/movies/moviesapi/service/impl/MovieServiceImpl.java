@@ -6,13 +6,14 @@ import com.endava.movies.moviesapi.model.entities.MovieEntity;
 import com.endava.movies.moviesapi.model.mapper.MovieMapper;
 import com.endava.movies.moviesapi.repository.MovieRepository;
 import com.endava.movies.moviesapi.service.MovieService;
+import com.mongodb.BasicDBList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,8 +32,17 @@ public class MovieServiceImpl implements MovieService {
                 .map(MovieMapper.INSTANCE::movieEntityToMovieDTO);
     }
     @Override
-    public Optional<List<MovieEntity>> getMoviesFilter(Boolean adult, String title, List<GenreEntity> genres){
-        return movieRepository.findByAdultAndTitleAndGenres(adult,title,genres);
+    public Page<MovieEntity> getMoviesFilter(Integer pageNumber,Boolean adult, String title, List<String> genres,Integer limit){
+        ExampleMatcher customExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+        Example<MovieEntity> movieExample = Example.of(
+                MovieEntity.builder()
+                        .adult(adult)
+                        .title(title)
+                        .genres(genres)
+                        .build(),customExampleMatcher);
+        Pageable page = PageRequest.of(pageNumber, limit);
+        return movieRepository.findAll(movieExample,page);
     }
 
     @Override

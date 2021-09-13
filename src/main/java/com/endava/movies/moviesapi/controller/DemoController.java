@@ -13,6 +13,7 @@ import com.opencsv.CSVReader;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,19 +60,17 @@ public class DemoController {
 
     }
 
-    @GetMapping("movies/")
-    public ResponseEntity<List<MovieEntity>> getMovies(@RequestParam(required = false) Boolean adult,
-                                                       @RequestParam(required = false) List<GenreEntity> genres,
+    @GetMapping("movies/{page}")
+    public ResponseEntity<Page<MovieEntity>> getMovies(@PathVariable("page") Integer page,
+                                                       @RequestParam(required = false) Boolean adult,
+                                                       @RequestParam(required = false) String genres,
                                                        @RequestParam(required = false) String title,
-                                                       @RequestParam(required = false) Integer limit){
-//        List<GenreEntity> genres = new ArrayList<>();
-//        Arrays.stream(genre.split(",")).forEach(g ->{
-//            genres.add(new GenreEntity())
-//        });
-        return movieServiceImpl
-                .getMoviesFilter(adult,title,genres)
-                .map(ResponseEntity::ok)
-                .orElseGet(()->ResponseEntity.noContent().build());
+                                                       @RequestParam(required = false,defaultValue = "100") Integer limit){
+        List<String> genresSent = null;
+        if(genres!=null)
+            genresSent=Arrays.asList(genres.split(","));
+        return ResponseEntity.ok(movieServiceImpl
+                .getMoviesFilter(page,adult,title,genresSent,limit));
     }
     @GetMapping("/load/movies")
     public ResponseEntity<String> uploadMovies(){
