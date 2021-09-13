@@ -63,11 +63,14 @@ public class DemoController {
     @GetMapping("movies/{page}")
     public ResponseEntity<Page<MovieEntity>> getMovies(@PathVariable("page") Integer page,
                                                        @RequestParam(required = false) Boolean adult,
-                                                       @RequestParam(required = false) List<GenreEntity> genres,
+                                                       @RequestParam(required = false) String genres,
                                                        @RequestParam(required = false) String title,
                                                        @RequestParam(required = false,defaultValue = "100") Integer limit){
+        List<String> genresSent = null;
+        if(genres!=null)
+            genresSent=Arrays.asList(genres.split(","));
         return ResponseEntity.ok(movieServiceImpl
-                .getMoviesFilter(page,adult,title,genres,limit));
+                .getMoviesFilter(page,adult,title,genresSent,limit));
     }
     @GetMapping("/load/movies")
     public ResponseEntity<String> uploadMovies(){

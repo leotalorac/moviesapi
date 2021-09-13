@@ -14,7 +14,7 @@ public class MovieDTO implements Serializable {
     private Integer id;
     private String originalTitle;
     private Boolean adult;
-    private List<GenreEntity> genres;
+    private List<String> genres;
     private String overview;
     private String originalLanguage;
     private List<RatingEntity> ratings;
