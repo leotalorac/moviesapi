@@ -7,12 +7,12 @@ import com.endava.movies.moviesapi.model.mapper.MovieMapper;
 import com.endava.movies.moviesapi.repository.MovieRepository;
 import com.endava.movies.moviesapi.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,8 +31,15 @@ public class MovieServiceImpl implements MovieService {
                 .map(MovieMapper.INSTANCE::movieEntityToMovieDTO);
     }
     @Override
-    public Optional<List<MovieEntity>> getMoviesFilter(Boolean adult, String title, List<GenreEntity> genres){
-        return movieRepository.findByAdultAndTitleAndGenres(adult,title,genres);
+    public Page<MovieEntity> getMoviesFilter(Integer page,Boolean adult, String title, List<GenreEntity> genres,Integer limit){
+        Example<MovieEntity> movieExample = Example.of(
+                MovieEntity.builder()
+                        .adult(adult)
+                        .title(title)
+                        .genres(genres)
+                        .build());
+        Pageable firstPageWithTwoElements = PageRequest.of(page, limit);
+        return movieRepository.findAll(movieExample,firstPageWithTwoElements);
     }
 
     @Override
