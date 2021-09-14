@@ -13,6 +13,7 @@ import com.opencsv.CSVReader;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +30,11 @@ import java.util.List;
 @Slf4j
 @RequestMapping("v1/demo-service")
 public class DemoController {
-    MovieService movieServiceImpl;
-    RatingService ratingServiceImpl;
+    private final MovieService movieServiceImpl;
+    private final RatingService ratingServiceImpl;
 
     @Autowired
-    public DemoController(MovieService movieServiceImpl,RatingService ratingServiceImpl) {
+    public DemoController(MovieService movieServiceImpl, RatingService ratingServiceImpl) {
         this.movieServiceImpl = movieServiceImpl;
         this.ratingServiceImpl=ratingServiceImpl;
     }
