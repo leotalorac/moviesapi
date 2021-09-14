@@ -29,12 +29,12 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("v1/demo-service")
-public class DemoController {
+public class MoviesApiController {
     private final MovieService movieServiceImpl;
     private final RatingService ratingServiceImpl;
 
     @Autowired
-    public DemoController(MovieService movieServiceImpl, RatingService ratingServiceImpl) {
+    public MoviesApiController(MovieService movieServiceImpl, RatingService ratingServiceImpl) {
         this.movieServiceImpl = movieServiceImpl;
         this.ratingServiceImpl=ratingServiceImpl;
     }
