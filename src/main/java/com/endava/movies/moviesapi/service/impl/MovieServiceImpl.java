@@ -46,8 +46,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Integer saveMovies() {
-        saveMoviesThreads(getMoviesFromCsv("./data/movies_metadata.csv"));
-        return movieRepository.findAll().size();
+        return saveMoviesThreads(getMoviesFromCsv("./data/movies_metadata.csv"));
     }
     public List<MovieEntity> getMoviesFromCsv(String path){
         List<MovieEntity> moviesToCharge = new ArrayList<>();
@@ -70,7 +69,7 @@ public class MovieServiceImpl implements MovieService {
         }
         return moviesToCharge;
     }
-    public void saveMoviesThreads(List<MovieEntity> movies){
+    public Integer saveMoviesThreads(List<MovieEntity> movies){
         List<Uploader> uploaders = new ArrayList<>();
         int MAX = 1000;
         int index=0;
@@ -89,6 +88,7 @@ public class MovieServiceImpl implements MovieService {
         while (!executor.isTerminated()) {}
         executor.shutdown();
         System.out.println("\nFinished all threads");
+        return movies.size();
     }
 
     //builder

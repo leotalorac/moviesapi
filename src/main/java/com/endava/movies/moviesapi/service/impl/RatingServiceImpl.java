@@ -31,7 +31,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     public Optional<List<RatingEntity>> getRatingsByMovie(Integer movieId){
-        return ratingRepository.findByMovieId(movieId);
+        return ratingRepository.findAllByMovieId(movieId);
     }
 
     @Override
