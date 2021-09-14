@@ -39,7 +39,6 @@ public class DemoController {
         this.ratingServiceImpl=ratingServiceImpl;
     }
 
-    //    Simple get request
     @GetMapping("/health-check")
     public ResponseEntity<String> healthCheck(){
         return ResponseEntity.ok("OK");
@@ -61,7 +60,7 @@ public class DemoController {
                 .orElseGet(()->ResponseEntity.noContent().build());
     }
 
-    @GetMapping("movies/{page}")
+    @GetMapping("/movies/{page}")
     public ResponseEntity<Page<MovieEntity>> getMovies(@PathVariable("page") Integer page,
                                                        @RequestParam(required = false) Boolean adult,
                                                        @RequestParam(required = false) String genres,
@@ -74,51 +73,17 @@ public class DemoController {
         return ResponseEntity.ok(movieServiceImpl
                 .getMoviesFilter(page,adult,title,genresSent,limit));
     }
-    @GetMapping("/load/movies")
-    public ResponseEntity<Integer> uploadMovies(){
-        return ResponseEntity.ok(movieServiceImpl.saveMovies());
+
+    @PostMapping("/load/movies")
+    public ResponseEntity<String> uploadMovies(){
+        movieServiceImpl.saveMovies();
+        return ResponseEntity.ok("Movies uploaded");
     }
 
-    @GetMapping("/load/ratings")
+    @PostMapping("/load/ratings")
     public ResponseEntity<String> uploadRatings(){
-        try(CSVReader reader = new CSVReader(new FileReader("./data/ratings.csv"))){
-            String[] row;
-            List<RatingEntity> ratingsToCharge = new ArrayList<>();
-            boolean first = false;
-            Integer id= 0;
-            while ((row = reader.readNext()) != null) {
-                if(first){
-                    try {
-                        ratingsToCharge.add(ratingsFromLine(row,id));
-                        id+=1;
-                        if(id%50000==0){
-                            ratingServiceImpl.saveRatings(ratingsToCharge);
-                            ratingsToCharge.clear();
-                        }
-                    }catch (Exception e){
-                        log.error("Error ," , e);
-                    }
-                }else{
-                    first=true;
-                }
-            }
-            ratingServiceImpl.saveRatings(ratingsToCharge);
-            ratingsToCharge.clear();
-            return ResponseEntity.ok("Uploaded");
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
-    //builder
-    public RatingEntity ratingsFromLine(String[] line,Integer id) throws JsonProcessingException {
-        return RatingEntity.builder()
-                .id(id)
-                .userId(Integer.parseInt(line[0]))
-                .movieId(Integer.parseInt(line[1]))
-                .rating(Float.parseFloat(line[2]))
-                .timestamp(line[3])
-                .build();
+        ratingServiceImpl.saveRatings();
+        return ResponseEntity.ok("Ratings Uploaded");
     }
 
 }
