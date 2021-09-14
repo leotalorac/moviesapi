@@ -52,6 +52,7 @@ public class DemoController {
                     .map(ResponseEntity::ok)
                     .orElseGet(()->ResponseEntity.noContent().build());
     }
+
     @GetMapping("/movie/{id}/rating")
     public ResponseEntity<List<RatingEntity>> getRatingByMovieId(@PathVariable("id") Integer id){
         return ratingServiceImpl
@@ -66,9 +67,10 @@ public class DemoController {
                                                        @RequestParam(required = false) String genres,
                                                        @RequestParam(required = false) String title,
                                                        @RequestParam(required = false,defaultValue = "100") Integer limit){
-        List<String> genresSent = null;
-        if(genres!=null)
-            genresSent=Arrays.asList(genres.split(","));
+        String[] genresSent = {};
+        if(genres!=null){
+           genresSent= genres.split(",");
+        }
         return ResponseEntity.ok(movieServiceImpl
                 .getMoviesFilter(page,adult,title,genresSent,limit));
     }
