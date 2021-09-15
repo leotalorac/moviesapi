@@ -39,8 +39,11 @@ public class MovieServiceImpl implements MovieService {
                 .map(MovieMapper.INSTANCE::movieEntityToMovieDTO);
     }
     @Override
-    public Page<MovieEntity> getMoviesFilter(Integer pageNumber,Boolean adult, String title, String[] genres,Integer limit){
+    public Page<MovieEntity> getMoviesFilter(Integer pageNumber,Boolean adult, String title, String[] genres,Integer limit,String sortParam){
         Pageable page = PageRequest.of(pageNumber, limit);
+        if (sortParam!=null){
+            page = PageRequest.of(pageNumber, limit,Sort.by(sortParam));
+        }
         return movieRepository.filterMovies(title,adult, genres,page);
     }
 

@@ -65,13 +65,14 @@ public class MoviesApiController {
                                                        @RequestParam(required = false) Boolean adult,
                                                        @RequestParam(required = false) String genres,
                                                        @RequestParam(required = false) String title,
-                                                       @RequestParam(required = false,defaultValue = "100") Integer limit){
+                                                       @RequestParam(required = false,defaultValue = "100") Integer limit,
+                                                       @RequestParam(required = false,defaultValue = "title") String sortParam){
         String[] genresSent = {};
         if(genres!=null){
            genresSent= genres.split(",");
         }
         return ResponseEntity.ok(movieServiceImpl
-                .getMoviesFilter(page,adult,title,genresSent,limit));
+                .getMoviesFilter(page,adult,title,genresSent,limit,sortParam));
     }
 
     @PostMapping("/load/movies")
