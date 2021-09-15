@@ -46,7 +46,7 @@ class MovieServiceImplTest {
         Page<MovieEntity> movie = new PageImpl<>(Collections.singletonList(MovieEntity.builder().id(10).adult(true).title("Super movie").genres(Collections.singletonList("Horror")).build()));
         Pageable page = PageRequest.of(1, 10);
         when(movieRepository.filterMovies("Super movie",true,new String[]{"Horror"},page)).thenReturn(movie);
-        Page<MovieEntity> result =  movieService.getMoviesFilter(1,true,"Super movie", new String[]{"Horror"},10);
+        Page<MovieEntity> result =  movieService.getMoviesFilter(1,true,"Super movie", new String[]{"Horror"},10,null);
         assertNotNull(result);
         assertTrue(result.hasContent());
         System.out.println(movie);

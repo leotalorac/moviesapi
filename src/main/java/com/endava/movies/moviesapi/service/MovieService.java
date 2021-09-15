@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface MovieService {
     Optional<MovieDTO> getMovieById(Integer id);
     Integer saveMovies();
-    Page<MovieEntity> getMoviesFilter(Integer page,Boolean adult, String title, String[] genres,Integer limit);
+    Page<MovieEntity> getMoviesFilter(Integer page,Boolean adult, String title, String[] genres,Integer limit,String sortParam);
 }
