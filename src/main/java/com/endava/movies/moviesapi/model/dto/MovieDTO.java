@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MovieDTO implements Serializable {
     private Integer id;
     private String originalTitle;

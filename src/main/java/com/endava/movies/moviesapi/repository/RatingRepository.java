@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface RatingRepository extends MongoRepository<RatingEntity,Integer> {
-    public Optional<List<RatingEntity>> findByMovieId(Integer movieId);
+    Optional<List<RatingEntity>> findAllByMovieId(Integer movieId);
 
 }
