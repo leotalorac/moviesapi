@@ -23,7 +23,8 @@ public class MovieEntity implements Serializable {
     private List<String> genres;
     private String overview;
     private String originalLanguage;
-    private List<RatingEntity> ratings;
+    private Float rating;
     private Integer budget;
     private String title;
+    private String image;
 }

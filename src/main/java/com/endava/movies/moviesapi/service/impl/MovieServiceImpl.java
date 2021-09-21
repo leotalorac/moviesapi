@@ -8,7 +8,10 @@ import com.endava.movies.moviesapi.repository.MovieRepository;
 import com.endava.movies.moviesapi.service.MovieService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.BasicDBList;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -49,11 +52,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Integer saveMovies() {
-        return saveMoviesThreads(getMoviesFromCsv("./data/movies_metadata.csv"));
+        return saveMoviesThreads(getMoviesFromCsv("./data/movies.csv"));
     }
     public List<MovieEntity> getMoviesFromCsv(String path){
         List<MovieEntity> moviesToCharge = new ArrayList<>();
-        try(CSVReader reader = new CSVReader(new FileReader(path))){
+        try(CSVReader reader = new CSVReaderBuilder(new FileReader(path)).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()){
             String[] row;
             boolean first = false;
             while ((row = reader.readNext()) != null) {
@@ -103,9 +106,10 @@ public class MovieServiceImpl implements MovieService {
                 .genres(new GenreParser().parseJson(line[3]))
                 .overview(line[9])
                 .originalLanguage(line[7])
-                .ratings(new ArrayList<>())
+                .rating(Float.parseFloat(line[22]))
                 .budget(Integer.parseInt(line[2]))
                 .title(line[20])
+                .image(line[24])
                 .build();
     }
 
