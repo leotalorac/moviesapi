@@ -8,7 +8,10 @@ import com.endava.movies.moviesapi.repository.MovieRepository;
 import com.endava.movies.moviesapi.service.MovieService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.BasicDBList;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -103,9 +106,12 @@ public class MovieServiceImpl implements MovieService {
                 .genres(new GenreParser().parseJson(line[3]))
                 .overview(line[9])
                 .originalLanguage(line[7])
-                .ratings(new ArrayList<>())
+                .rating(Float.parseFloat(line[22]))
                 .budget(Integer.parseInt(line[2]))
                 .title(line[20])
+                .image(line[24])
+                .trailer(line[25])
+                .runtime(Integer.parseInt(line[16]))
                 .build();
     }
 

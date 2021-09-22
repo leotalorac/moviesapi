@@ -44,6 +44,7 @@ public class MoviesApiController {
         return ResponseEntity.ok("OK");
     }
 
+    @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
     @GetMapping("/movie/{id}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable("id") Integer id){
             return movieServiceImpl
@@ -52,6 +53,7 @@ public class MoviesApiController {
                     .orElseGet(()->ResponseEntity.noContent().build());
     }
 
+    @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
     @GetMapping("/movie/{id}/rating")
     public ResponseEntity<List<RatingEntity>> getRatingByMovieId(@PathVariable("id") Integer id){
         return ratingServiceImpl
@@ -60,6 +62,7 @@ public class MoviesApiController {
                 .orElseGet(()->ResponseEntity.noContent().build());
     }
 
+    @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
     @GetMapping("/movies/{page}")
     public ResponseEntity<Page<MovieEntity>> getMovies(@PathVariable("page") Integer page,
                                                        @RequestParam(required = false) Boolean adult,
