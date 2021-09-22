@@ -22,4 +22,6 @@ public class MovieDTO implements Serializable {
     private Integer budget;
     private String title;
     private String image;
+    private String trailer;
+    private Integer runtime;
 }

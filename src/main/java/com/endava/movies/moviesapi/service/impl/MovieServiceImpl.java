@@ -52,11 +52,11 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Integer saveMovies() {
-        return saveMoviesThreads(getMoviesFromCsv("./data/movies.csv"));
+        return saveMoviesThreads(getMoviesFromCsv("./data/movies_metadata.csv"));
     }
     public List<MovieEntity> getMoviesFromCsv(String path){
         List<MovieEntity> moviesToCharge = new ArrayList<>();
-        try(CSVReader reader = new CSVReaderBuilder(new FileReader(path)).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()){
+        try(CSVReader reader = new CSVReader(new FileReader(path))){
             String[] row;
             boolean first = false;
             while ((row = reader.readNext()) != null) {
@@ -110,6 +110,8 @@ public class MovieServiceImpl implements MovieService {
                 .budget(Integer.parseInt(line[2]))
                 .title(line[20])
                 .image(line[24])
+                .trailer(line[25])
+                .runtime(Integer.parseInt(line[16]))
                 .build();
     }
 
